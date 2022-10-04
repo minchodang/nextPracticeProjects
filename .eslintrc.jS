@@ -24,5 +24,5 @@ rules: {
 'react-hooks/exhaustive-deps': 'error'
 },
 parserOptions: parserOptions,
-extends: ['plugin:storybook/recommended']
+// extends: ['plugin:storybook/recommended']
 };

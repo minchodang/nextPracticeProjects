@@ -1,4 +1,5 @@
 import { EventItem } from '@components/events/EventItem';
+import styled from 'styled-components';
 
 interface EventListProps {
     items: ItemType[];
@@ -14,9 +15,15 @@ export type ItemType = {
     isFeatured: boolean;
 };
 
+const EventListContainer = styled.div`
+    width: 90%;
+    max-width: 40rem;
+    margin: 5rem auto;
+`;
+
 export const EventList = ({ items }: EventListProps) => {
     return (
-        <ul>
+        <EventListContainer>
             {items.map((event) => (
                 <EventItem
                     key={event.id}
@@ -29,6 +36,6 @@ export const EventList = ({ items }: EventListProps) => {
                     isFeatured={event.isFeatured}
                 />
             ))}
-        </ul>
+        </EventListContainer>
     );
 };

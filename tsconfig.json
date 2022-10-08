@@ -44,9 +44,6 @@
         "./core/*"
       ]
     },
-//    "types": [
-//      "@emotion/react/types/css-prop"
-//    ],
     "incremental": true
   },
   "exclude": [

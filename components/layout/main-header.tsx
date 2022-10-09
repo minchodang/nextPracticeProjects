@@ -13,7 +13,6 @@ const Header = styled.header`
 
 const LogoContainer = styled.div`
     font-size: 1.5rem;
-    color: white;
     font-family: 'Fira', sans-serif;
     height: 100%;
     display: flex;

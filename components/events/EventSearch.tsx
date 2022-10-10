@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Button } from '@components/ui/button';
-import { FormEvent, useRef } from 'react';
+import { FormEvent, MutableRefObject, useRef } from 'react';
 
 interface EventSearchProps {
     onSearch: (year: string, month: string) => void;
@@ -83,14 +83,14 @@ export const EventSearch = ({ onSearch }: EventSearchProps) => {
             <Controls>
                 <Control>
                     <label htmlFor={'year'}>Year</label>
-                    <select id={'year'} ref={yearInputRef}>
+                    <select id={'year'} ref={yearInputRef as MutableRefObject<any>}>
                         <option value={'2021'}>2021</option>
                         <option value={'2022'}>2022</option>
                     </select>
                 </Control>
                 <Control>
                     <label htmlFor={'month'}>Month</label>
-                    <select id={'month'} ref={monthInputRef}>
+                    <select id={'month'} ref={monthInputRef as MutableRefObject<any>}>
                         <option value={'1'}>January</option>
                         <option value={'2'}>February</option>
                         <option value={'3'}>March</option>

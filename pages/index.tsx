@@ -1,17 +1,24 @@
-import type { NextPage } from 'next';
-import { getFeaturedEvents } from '../dummy-data';
+import { getFeaturedEvents } from '../helpers/api-util';
 import { EventList } from '@components/events/EventList';
-import styled from 'styled-components';
+import { InferGetStaticPropsType } from 'next';
 
-const Container = styled.div``;
-
-const Home: NextPage = () => {
-    const featuredEvents = getFeaturedEvents();
+const HomePage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
     return (
-        <Container>
-            <EventList items={featuredEvents} />
-        </Container>
+        <div>
+            <EventList items={props.events} />
+        </div>
     );
 };
 
-export default Home;
+export async function getStaticProps() {
+    const featuredEvents = await getFeaturedEvents();
+
+    return {
+        props: {
+            events: featuredEvents,
+        },
+        revalidate: 1800,
+    };
+}
+
+export default HomePage;

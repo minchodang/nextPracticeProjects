@@ -117,7 +117,7 @@ export const EventItem = ({ title, image, date, location, id }: ItemType) => {
         year: 'numeric',
     });
 
-    const formattedAddress = location.replace(', ', '\n');
+    const formattedAddress = location.replace(',', '\n');
     const exploreLink = `/events/${id}`;
     return (
         <ClassListContainer>

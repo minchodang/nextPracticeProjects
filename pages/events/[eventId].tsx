@@ -3,6 +3,7 @@ import EventSummary from '@components/event-detail/event-summary';
 import EventLogistics from '@components/event-detail/event-logistics';
 import EventContent from '@components/event-detail/event-content';
 import { getEventById, getFeaturedEvents } from '../../helpers/api-util';
+import Comments from '@components/input/Comments';
 
 const EventDetail = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
     const event = props.selectedEvent;
@@ -27,6 +28,7 @@ const EventDetail = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
             <EventContent>
                 <p>{event.description}</p>
             </EventContent>
+            <Comments eventId={event.id} />
         </>
     );
 };

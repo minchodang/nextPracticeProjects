@@ -24,12 +24,10 @@ const registrationHandler = (req: NextApiRequest, res: NextApiResponse<Data>) =>
     console.log(req);
     if (req.method === 'POST') {
         const email = req.body.email;
-
         if (!email || !email.includes('@')) {
             res.status(422).json({ message: 'Invalid email address.' });
             return;
         }
-
         const filePath = buildRegistrationPath();
         const data = extractRegistration(filePath);
 

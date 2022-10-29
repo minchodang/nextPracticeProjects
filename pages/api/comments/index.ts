@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export type Data = {
     message?: string;
-    commentData: CommentDataType;
+    comments?: CommentDataType | CommentLists[];
 };
 
 export interface CommentDataType {
@@ -12,6 +12,12 @@ export interface CommentDataType {
     email: string;
     name: string;
     comment: string;
+}
+
+export interface CommentLists {
+    id: string;
+    name: string;
+    text: string;
 }
 
 export function buildCommentsPath() {

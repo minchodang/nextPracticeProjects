@@ -76,7 +76,7 @@ const NewComment = ({ onAddComment }: NewCommentProps) => {
     }
 
     return (
-        <Form>
+        <Form onSubmit={sendCommentHandler}>
             <Row>
                 <Control>
                     <label htmlFor="email">Your email</label>

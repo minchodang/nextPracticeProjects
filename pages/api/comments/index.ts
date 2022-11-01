@@ -11,7 +11,7 @@ export interface CommentDataType {
     id: string;
     email: string;
     name: string;
-    comment: string;
+    text: string;
 }
 
 export interface CommentLists {
@@ -50,7 +50,7 @@ const registrationHandler = (req: NextApiRequest, res: NextApiResponse<Data>) =>
         fs.writeFileSync(filePath, JSON.stringify(data));
         res.status(201).json({
             message: 'Success!',
-            commentData: commentData,
+            comments: comment,
         });
     } else {
         return;

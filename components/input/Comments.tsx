@@ -28,18 +28,19 @@ const CommentsContainer = styled.section`
     address {
         display: inline;
     }
-    button {
-        font: inherit;
-        border-radius: 6px;
-        padding: 0.5rem 1rem;
-        background-color: transparent;
-        color: #03be9f;
-        border: 1px solid #03be9f;
-        cursor: pointer;
-        :hover,
-        :active {
-            background-color: #dcfff9;
-        }
+`;
+
+const ShowButton = styled.div`
+    font: inherit;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    color: #03be9f;
+    border: 1px solid #03be9f;
+    cursor: pointer;
+    :hover,
+    :active {
+        background-color: #dcfff9;
     }
 `;
 
@@ -50,14 +51,22 @@ const Comments = ({ eventId }: CommentsProps) => {
         setShowComments((prevStatus) => !prevStatus);
     }
 
+    useEffect(() => {
+        if (showComments) {
+            axios
+                .get(`/api/comments/${eventId}`)
+                .then((response) => response)
+                .then((data) => setCommentLists(data.data.comments));
+        }
+    }, [eventId, showComments]);
     function addCommentHandler(commentEmail: string, commentName: string, commentText: string) {
         axios
             .post(
-                '/api/comments',
+                `/api/comments/${eventId}`,
                 {
                     email: commentEmail,
                     name: commentName,
-                    comment: commentText,
+                    text: commentText,
                 },
                 {
                     headers: {
@@ -70,16 +79,11 @@ const Comments = ({ eventId }: CommentsProps) => {
         // send data to API
     }
 
-    useEffect(() => {
-        axios.get(`/api/comments/${eventId}`).then((res) => setCommentLists(res.data.comment));
-        // console.log(commentLists);
-    }, [commentLists, eventId, showComments]);
-
     return (
         <CommentsContainer>
-            <button onClick={toggleCommentsHandler}>
+            <ShowButton onClick={toggleCommentsHandler}>
                 {showComments ? 'Hide' : 'Show'} Comments
-            </button>
+            </ShowButton>
             {showComments && <NewComment onAddComment={addCommentHandler} />}
             {showComments && <CommentList commentLists={commentLists} />}
         </CommentsContainer>

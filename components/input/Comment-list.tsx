@@ -33,7 +33,7 @@ const CommentList = ({ commentLists }: CommentListProps) => {
             {commentLists &&
                 commentLists.map((comments) => (
                     <li key={comments.id}>
-                        <p>{comments.comment}</p>
+                        <p>{comments.text}</p>
 
                         <div>
                             By <address>{comments.name}</address>

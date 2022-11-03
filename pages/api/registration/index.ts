@@ -1,6 +1,7 @@
 import path from 'path';
 import * as fs from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { MongoClient } from 'mongodb';
 
 export type Data = {
     message?: string;
@@ -20,7 +21,7 @@ export function extractRegistration(filePath: fs.PathOrFileDescriptor) {
     return data;
 }
 
-const registrationHandler = (req: NextApiRequest, res: NextApiResponse<Data>) => {
+const registrationHandler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     console.log(req);
     if (req.method === 'POST') {
         const email = req.body.email;
@@ -38,6 +39,15 @@ const registrationHandler = (req: NextApiRequest, res: NextApiResponse<Data>) =>
 
         data.push(registrationData);
         fs.writeFileSync(filePath, JSON.stringify(data));
+        const client = await MongoClient.connect(
+            'mongodb+srv://minsu:vw0725@cluster0.l1xz3m6.mongodb.net/newsletter?retryWrites=true&w=majority',
+        );
+        const db = client.db();
+        await db.collection('emails').insertOne({
+            email: email,
+        });
+
+        client.close();
         res.status(201).json({
             message: 'Signed up!',
             registrationData: registrationData,

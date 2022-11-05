@@ -20,12 +20,6 @@ export interface CommentLists {
     text: string;
 }
 
-export interface CommentLists {
-    id: string;
-    name: string;
-    text: string;
-}
-
 export function buildCommentsPath() {
     return path.join(process.cwd(), 'data', 'comments.json');
 }

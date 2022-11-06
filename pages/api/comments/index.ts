@@ -8,7 +8,6 @@ export type Data = {
 };
 
 export interface CommentDataType {
-    id: string;
     email: string;
     name: string;
     text: string;

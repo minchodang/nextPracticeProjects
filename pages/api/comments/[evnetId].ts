@@ -5,7 +5,7 @@ import { MongoClient } from 'mongodb';
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     const eventId = req.query.eventId;
     const client = await MongoClient.connect(
-        'mongodb+srv://minsu:vw0725@cluster0.l1xz3m6.mongodb.net/events?retryWrites=true&w=majority',
+        `mongodb+srv://${process.env.MONGO_ID}:${process.env.MONGO_KEY}@cluster0.l1xz3m6.mongodb.net/events?retryWrites=true&w=majority`,
     );
 
     if (req.method === 'POST') {

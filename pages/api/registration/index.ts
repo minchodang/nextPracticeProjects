@@ -40,7 +40,7 @@ const registrationHandler = async (req: NextApiRequest, res: NextApiResponse<Dat
         data.push(registrationData);
         fs.writeFileSync(filePath, JSON.stringify(data));
         const client = await MongoClient.connect(
-            'mongodb+srv://minsu:vw0725@cluster0.l1xz3m6.mongodb.net/newsletter?retryWrites=true&w=majority',
+            `mongodb+srv://${process.env.MONGO_ID}:${process.env.MONGO_KEY}@cluster0.l1xz3m6.mongodb.net/events?retryWrites=true&w=majority`,
         );
         const db = client.db();
         await db.collection('emails').insertOne({

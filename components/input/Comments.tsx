@@ -69,6 +69,9 @@ const Comments = ({ eventId }: CommentsProps) => {
                     text: commentText,
                 },
                 {
+                    params: {
+                        eventId,
+                    },
                     headers: {
                         'Content-Type': 'application/json',
                     },

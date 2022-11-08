@@ -4,13 +4,15 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export type Data = {
     message?: string;
-    comments?: CommentDataType | CommentLists[];
+    comments?: any;
 };
 
 export interface CommentDataType {
     email: string;
     name: string;
     text: string;
+    eventId: string;
+    _id: string;
 }
 
 export interface CommentLists {

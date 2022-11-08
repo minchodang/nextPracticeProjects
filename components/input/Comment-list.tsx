@@ -32,7 +32,7 @@ const CommentList = ({ commentLists }: CommentListProps) => {
             {/* Render list of comments - fetched from API */}
             {commentLists &&
                 commentLists.map((comments) => (
-                    <li key={comments.id}>
+                    <li key={comments._id}>
                         <p>{comments.text}</p>
 
                         <div>

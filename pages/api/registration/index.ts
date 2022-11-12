@@ -28,7 +28,7 @@ const registrationHandler = async (req: NextApiRequest, res: NextApiResponse<Dat
             res.status(422).json({ message: 'Invalid email address.' });
             return;
         }
-
+        
         let client;
         try {
             client = await connectDatabase();
@@ -49,7 +49,7 @@ const registrationHandler = async (req: NextApiRequest, res: NextApiResponse<Dat
             });
             return;
         }
-
+  
         res.status(201).json({
             message: 'Signed up!',
         });

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { MongoClient } from 'mongodb';
+import { connectDatabase, insertDocument } from '../../../helpers/db-util';
 
 export type Data = {
     message?: string;
@@ -7,17 +7,6 @@ export type Data = {
         id: string;
         email: string;
     };
-};
-
-const connectDatabase = async () => {
-    const client = await MongoClient.connect(
-        `mongodb+srv://${process.env.MONGO_ID}:${process.env.MONGO_KEY}@cluster0.l1xz3m6.mongodb.net/events?retryWrites=true&w=majority`,
-    );
-    return client;
-};
-const insertDocument = async (client: MongoClient, document: { email: string }) => {
-    const db = client.db();
-    await db.collection('emails').insertOne(document);
 };
 
 const registrationHandler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
@@ -28,7 +17,7 @@ const registrationHandler = async (req: NextApiRequest, res: NextApiResponse<Dat
             res.status(422).json({ message: 'Invalid email address.' });
             return;
         }
-        
+
         let client;
         try {
             client = await connectDatabase();
@@ -39,7 +28,7 @@ const registrationHandler = async (req: NextApiRequest, res: NextApiResponse<Dat
             return;
         }
         try {
-            await insertDocument(client, {
+            await insertDocument(client, 'newsletter', {
                 email: email,
             });
             client.close();
@@ -49,7 +38,7 @@ const registrationHandler = async (req: NextApiRequest, res: NextApiResponse<Dat
             });
             return;
         }
-  
+
         res.status(201).json({
             message: 'Signed up!',
         });

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { FormEvent, MutableRefObject, useRef } from 'react';
-import axios from 'axios';
+import { FormEvent, MutableRefObject, useContext, useRef } from 'react';
+import NotificationContext from '../../store/notification-context';
 
 const NewsLetter = styled.section`
     margin: 3rem auto;
@@ -40,29 +40,48 @@ const Control = styled.div`
 `;
 const NewsletterRegistration = () => {
     const inputRef = useRef<any>(null);
+    const notificationCtx = useContext(NotificationContext);
+
+    useContext(NotificationContext);
     function registrationHandler(event: FormEvent) {
         event.preventDefault();
         const registerInput = inputRef.current?.value;
 
-        axios
-            .post(
-                '/api/registration',
-                {
-                    email: registerInput,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                },
-            )
-            .catch((error) => console.log(error))
-            .then((response) => response)
-            .then((data) => console.log(data));
+        notificationCtx.showNotification({
+            title: 'Signing up...',
+            message: 'Registering for newsletter.',
+            status: 'pending',
+        });
+        fetch('/api/registration', {
+            method: 'POST',
+            body: JSON.stringify({ email: registerInput }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
 
-        // fetch user input (state or refs)
-        // optional: validate input
-        // send valid data to API
+                return response.json().then((data) => {
+                    throw new Error(data.message || 'Something went wrong!');
+                });
+            })
+            .then((data) => {
+                notificationCtx.showNotification({
+                    title: 'Success!',
+                    message: 'Successfully registered for newsletter!',
+                    status: 'success',
+                });
+            })
+            .catch((error) => {
+                notificationCtx.showNotification({
+                    title: 'Error!',
+                    message: error.message || 'Something went wrong!',
+                    status: 'error',
+                });
+            });
     }
 
     return (

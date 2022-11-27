@@ -5,6 +5,7 @@ import {
     ReactFragment,
     ReactPortal,
     SetStateAction,
+    useEffect,
     useState,
 } from 'react';
 
@@ -38,6 +39,20 @@ export function NotificationContextProvider(props: {
         | undefined;
 }) {
     const [activeNotification, setActiveNotification] = useState<NotificationDataType | null>();
+
+    useEffect(() => {
+        if (
+            activeNotification &&
+            (activeNotification.status === 'success' || activeNotification.status === 'error')
+        ) {
+            const timer = setTimeout(() => {
+                setActiveNotification(null);
+            }, 3000);
+            return () => {
+                clearTimeout(timer);
+            };
+        }
+    }, [activeNotification]);
 
     function showNotificationHandler(
         notificationData: SetStateAction<NotificationDataType | null | undefined>,

@@ -16,8 +16,13 @@ export const insertDocument = async (
     return result;
 };
 
-export const getAllDocuments = async (client: MongoClient, collection: string, sort: any) => {
+export const getAllDocuments = async (
+    client: MongoClient,
+    collection: string,
+    sort: any,
+    filter: { eventId: string },
+) => {
     const db = client.db();
-    const documents = await db.collection(collection).find().sort(sort).toArray();
+    const documents = await db.collection(collection).find(filter).sort(sort).toArray();
     return documents;
 };

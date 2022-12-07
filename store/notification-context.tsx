@@ -53,7 +53,6 @@ export function NotificationContextProvider(props: {
             };
         }
     }, [activeNotification]);
-    
     function showNotificationHandler(
         notificationData: SetStateAction<NotificationDataType | null | undefined>,
     ) {

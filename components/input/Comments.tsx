@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import CommentList from '@components/input/Comment-list';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import NewComment from '@components/input/New-comments';
 import axios from 'axios';
+import NotificationContext from '../../store/notification-context';
 
 interface CommentsProps {
     eventId: string;
@@ -45,21 +46,33 @@ const ShowButton = styled.div`
 `;
 
 const Comments = ({ eventId }: CommentsProps) => {
+    const notificationCtx = useContext(NotificationContext);
+
     const [showComments, setShowComments] = useState<boolean>(false);
     const [commentLists, setCommentLists] = useState([]);
+    const [isFetchingComments, setIsFetchingComments] = useState(false);
     function toggleCommentsHandler() {
         setShowComments((prevStatus) => !prevStatus);
     }
 
     useEffect(() => {
         if (showComments) {
+            setIsFetchingComments(true);
             axios
                 .get(`/api/comments/${eventId}`)
                 .then((response) => response)
-                .then((data) => setCommentLists(data.data.comments));
+                .then((data) => {
+                    setCommentLists(data.data.comments);
+                    setIsFetchingComments(false);
+                });
         }
     }, [eventId, showComments]);
     function addCommentHandler(commentEmail: string, commentName: string, commentText: string) {
+        notificationCtx.showNotification({
+            title: 'Signing up...',
+            message: 'Your comment is currently being stored into a database.',
+            status: 'pending',
+        });
         axios
             .post(
                 `/api/comments/${eventId}`,
@@ -78,7 +91,20 @@ const Comments = ({ eventId }: CommentsProps) => {
                 },
             )
             .then((response) => response)
-            .then((data) => console.log(data));
+            .then((data) => {
+                notificationCtx.showNotification({
+                    title: 'Success',
+                    message: 'Your comment was saved!.',
+                    status: 'success',
+                });
+            })
+            .catch((error) => {
+                notificationCtx.showNotification({
+                    title: 'Error!',
+                    message: error.message || 'Something went wrong!',
+                    status: 'error',
+                });
+            });
         // send data to API
     }
 
@@ -88,7 +114,8 @@ const Comments = ({ eventId }: CommentsProps) => {
                 {showComments ? 'Hide' : 'Show'} Comments
             </ShowButton>
             {showComments && <NewComment onAddComment={addCommentHandler} />}
-            {showComments && <CommentList commentLists={commentLists} />}
+            {showComments && !isFetchingComments && <CommentList commentLists={commentLists} />}
+            {showComments && isFetchingComments && <p>Loading...</p>}
         </CommentsContainer>
     );
 };
